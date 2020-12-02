@@ -29,3 +29,38 @@ class MemberType(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.code}'
+
+
+class MemberAccount(models.Model):
+    """
+    Account for members to transact
+    """
+    member = models.ForeignKey(Member, on_delete=models.PROTECT)
+    account_number = models.CharField(max_length=50)
+    date_joined = models.DateTimeField(auto_now=True)
+    balance = models.FloatField(default=0.0)
+    is_active = models.BooleanField(default=False)
+    account_type = models.CharField(max_length=200)
+
+
+class Debit(models.Model):
+
+    reference = models.CharField(max_length=50)
+    member_account = models.ForeignKey(MemberAccount, blank=True)
+    date_debited = models.DateTimeField(auto_now_add=True)
+    amount = models.CharField(max_length=50)
+
+class Credit(models.Model):
+
+    reference = models.CharField(max_length=50)
+    member_account = models.ForeignKey(MemberAccount, blank=True)
+    date_credited = models.DateTimeField(auto_now_add=True)
+    amount = models.CharField(max_length=50)
+
+class Loan(models.Model):
+    reference_number = models.CharField(max_length=200)
+    member_account = models.ForeignKey(MemberAccount,
+        on_delete=models.PROTECT)
+    loan_type = models.CharField(max_length=200)
+    loan_amount = models.FloatField()
+
