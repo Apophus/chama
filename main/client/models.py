@@ -17,7 +17,6 @@ class Member(User):
     def __str__(self):
         return f'{self.member_number} - {self.username}'
 
-
 class MemberType(models.Model):
     """
     Object representation of type of members
@@ -30,7 +29,6 @@ class MemberType(models.Model):
     def __str__(self):
         return f'{self.name} - {self.code}'
 
-
 class MemberAccount(models.Model):
     """
     Account for members to transact
@@ -41,7 +39,6 @@ class MemberAccount(models.Model):
     balance = models.FloatField(default=0.0)
     is_active = models.BooleanField(default=False)
     account_type = models.CharField(max_length=200)
-
 
 class Debit(models.Model):
 
