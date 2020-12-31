@@ -8,13 +8,17 @@ from ..models import MemberAccount, Loan, Debit, Credit, Member
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Member
-        fields = ('username', 'email', 'password', 'member_number', 'id_number')
+        fields = ('first_name', 'last_name','username', 'email', 'password', 'member_number',\
+             'id_number', 'group')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = Member(email=validated_data['email'], \
+        user = Member(first_name=validated_data['first_name'],\
+            last_name=validated_data['last_name'],
+            email=validated_data['email'], \
             username=validated_data['username'],
-            id_number=validated_data['id_number'])
+            id_number=validated_data['id_number'],
+            group=validated_data['group'])
 
         user.set_password(validated_data['password'])
         user.save()

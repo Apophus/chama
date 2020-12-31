@@ -40,10 +40,11 @@ class Member(User):
         max_length=100)
     member_type = models.ForeignKey(MemberType, blank=True,
         null=True, on_delete=models.PROTECT)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     id_number = models.CharField(max_length=60)
 
     def __str__(self):
-        return f'{self.member_number} - {self.username}'
+        return f'{self.first_name}  {self.last_name} - {self.member_number}'
 
     def save(self, *args, **kwargs):
 
