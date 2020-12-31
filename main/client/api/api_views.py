@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
+from .serializers import MemberSerializer, MemberAccountSerializer
 from ..models import Member
 
 
@@ -25,11 +26,17 @@ class LoginView(APIView):
             return Response({'error': 'Wrong credentials'}, \
                 status=status.HTTP_400_BAD_REQUEST)
 
+
+class MemberCreateView(generics.CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = MemberSerializer
+
 class MemberDetails(APIView):
     
     def get(self, request, pk):
         member = get_object_or_404(Member, pk=pk)
-        data = PollSerializer(member).data
+        data = MemberSerializer(member).data
 
         return Response(data)
 

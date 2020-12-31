@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from .helpers.generate_codes import get_unique_code
+
 # Create your models here.
 class Group(models.Model):
     """
@@ -12,7 +14,7 @@ class Group(models.Model):
     date_created = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {self.location}'
 
 
 class MemberType(models.Model):
@@ -43,6 +45,15 @@ class Member(User):
     def __str__(self):
         return f'{self.member_number} - {self.username}'
 
+    def save(self, *args, **kwargs):
+
+        if not self.member_number:
+
+            self.member_number = get_unique_code()
+        super(Member, self).save(* args, ** kwargs)
+
+        
+
 class MemberAccount(models.Model):
     """
     Account for members to transact
@@ -55,6 +66,18 @@ class MemberAccount(models.Model):
     account_type = models.CharField(max_length=200)
 
 
+    def __str__(self):
+        return f'{self.member.username} - {self.account_number}'
+    
+
+    def save(self, *args, **kwargs):
+    
+        if not self.account_number:
+
+            self.account_number = get_unique_code()
+        super(MemberAccount, self).save(* args, ** kwargs)
+
+
 class Debit(models.Model):
     
     reference = models.CharField(max_length=50)
@@ -63,12 +86,25 @@ class Debit(models.Model):
     date_debited = models.DateTimeField(auto_now_add=True)
     amount = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f'{self.member_account} - {self.reference}'
+
+    def save(self, *args, **kwargs):
+        
+        if not self.reference:
+
+            self.reference = get_unique_code()
+        super(MemberAccount, self).save(* args, ** kwargs)
+
 class Credit(models.Model):
 
     reference = models.CharField(max_length=50)
     member_account = models.ForeignKey(MemberAccount, blank=True, on_delete=models.CASCADE)
     date_credited = models.DateTimeField(auto_now_add=True)
     amount = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return f'{self.member_account} - {self.reference}'
 
 class Loan(models.Model):
     reference_number = models.CharField(max_length=200)
