@@ -1,10 +1,11 @@
+import logging
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 
 from ..models import MemberAccount, Loan, Debit, Credit, Member
-
-
+from ..helpers.account_creation import create_account
+logger = logging.getLogger(__name__)
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Member
@@ -23,7 +24,9 @@ class MemberSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         Token.objects.create(user=user)
-
+        logger.info(f'{user} token created. Creating account')
+        account = create_account(user)
+        logger.info('Account creation complete')
         return user
 
 class MemberAccountSerializer(serializers.ModelSerializer):

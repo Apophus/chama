@@ -71,12 +71,12 @@ class MemberAccount(models.Model):
         return f'{self.member.username} - {self.account_number}'
     
 
-    def save(self, *args, **kwargs):
+    # def save(self, *args, **kwargs):
     
-        if not self.account_number:
+    #     if not self.account_number:
 
-            self.account_number = get_unique_code()
-        super(MemberAccount, self).save(* args, ** kwargs)
+    #         self.account_number = get_unique_code()
+    #     super(MemberAccount, self).save(* args, ** kwargs)
 
 
 class Debit(models.Model):

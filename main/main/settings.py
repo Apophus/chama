@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-print(f' BASE == {BASE_DIR}')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -126,8 +126,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOG_FILE = str(BASE_DIR) + 'logs/system_logs.log'
-
+LOG_FILE = str(BASE_DIR) + '/logs/system_logs.log'
+print(f' file == {LOG_FILE}')
 LOGGING = {
     'version': 1,
     # Version of logging
@@ -151,7 +151,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'LOG_FILE',
+            'filename': LOG_FILE,
             'formatter': 'verbose'
         },
 
