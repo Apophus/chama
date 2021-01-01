@@ -68,15 +68,7 @@ class MemberAccount(models.Model):
 
 
     def __str__(self):
-        return f'{self.member.username} - {self.account_number}'
-    
-
-    # def save(self, *args, **kwargs):
-    
-    #     if not self.account_number:
-
-    #         self.account_number = get_unique_code()
-    #     super(MemberAccount, self).save(* args, ** kwargs)
+        return f'{self.member}'
 
 
 class Debit(models.Model):
