@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
 from .serializers import MemberSerializer, MemberAccountSerializer,\
-    MemberTypeSerializer
-from ..models import Member, MemberType, MemberAccount
+    MemberTypeSerializer, GroupSerializer
+from ..models import Member, MemberType, MemberAccount, Group
 
 
 class LoginView(APIView):
@@ -27,6 +27,9 @@ class LoginView(APIView):
             return Response({'error': 'Wrong credentials'}, \
                 status=status.HTTP_400_BAD_REQUEST)
 
+class GroupView(viewsets.ModelViewSet):
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
 
 class MemberListView(APIView):
 

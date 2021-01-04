@@ -5,10 +5,18 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 # from django_filters.rest_framework import DjangoFilterBackend   
 
-from ..models import MemberAccount, Loan, Debit, Credit, Member, MemberType
+from ..models import MemberAccount, Loan, Debit, Credit, Member, MemberType,\
+    Group
 from ..helpers.account_creation import create_account
 
 logger = logging.getLogger(__name__)
+
+
+class GroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = '__all__'
+        model = Group
 
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
