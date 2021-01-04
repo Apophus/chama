@@ -72,6 +72,19 @@ class MemberAccount(models.Model):
     def __str__(self):
         return f'{self.member}'
 
+    def debits(self):
+
+        debit_list = Debit.objects.filter(member_account=self)\
+            .values('reference', 'amount', 'date_debited')
+
+        return debit_list
+
+    def credits(self):
+
+        credit_list = Credit.objects.filter(member_account=self)\
+            .values('reference', 'amount', 'date_credited')
+
+        return credit_list
 
 class Debit(models.Model):
     
@@ -79,7 +92,7 @@ class Debit(models.Model):
     member_account = models.ForeignKey(MemberAccount, blank=True,\
         on_delete=models.CASCADE)
     date_debited = models.DateTimeField(auto_now_add=True)
-    amount = models.CharField(max_length=50)
+    amount = models.FloatField(max_length=50)
 
     def __str__(self):
         return f'{self.member_account} - {self.reference}'
@@ -102,7 +115,7 @@ class Credit(models.Model):
     member_account = models.ForeignKey(MemberAccount, blank=True,\
          on_delete=models.CASCADE)
     date_credited = models.DateTimeField(auto_now_add=True)
-    amount = models.CharField(max_length=50)
+    amount = models.FloatField(max_length=50)
     
     def __str__(self):
         return f'{self.member_account} - {self.reference}'
