@@ -9,6 +9,7 @@ from ..models import MemberAccount, Loan, Debit, Credit, Member, MemberType,\
     Group
 from ..helpers.account_creation import create_account
 from ..helpers.generate_codes import get_unique_code
+from ..helpers.debit import update_balance
 
 
 logger = logging.getLogger(__name__)
@@ -81,6 +82,9 @@ class DebitSerializer(serializers.ModelSerializer):
              )
 
         debit.save()
+
+        updated_balance = update_balance(debit)
+
         return debit
 
 class CreditSerializer(serializers.ModelSerializer):
