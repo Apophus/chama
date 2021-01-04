@@ -7,8 +7,10 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
 from .serializers import MemberSerializer, MemberAccountSerializer,\
-    MemberTypeSerializer, GroupSerializer
-from ..models import Member, MemberType, MemberAccount, Group
+    MemberTypeSerializer, GroupSerializer, CreditSerializer, DebitSerializer,\
+        LoanSerializer
+from ..models import Member, MemberType, MemberAccount, Group, Debit, Credit,\
+    Loan
 
 
 class LoginView(APIView):
@@ -58,25 +60,19 @@ class MemberTypeView(viewsets.ModelViewSet):
     serializer_class = MemberTypeSerializer
 
 
-class DebitView(APIView):
+class DebitView(viewsets.ModelViewSet):
     
-    def get(self, request):
-        pass
+    queryset = Debit.objects.all()
+    serializer_class = DebitSerializer
 
 
-class CreditView(APIView):
+class CreditView(viewsets.ModelViewSet):
     
-    def get(self, request):
-        pass
-
-    def post(self, request):
-        pass
+    queryset = Credit.objects.all()
+    serializer_class = CreditSerializer
     
 
-class LoanView(APIView):
+class LoanView(viewsets.ModelViewSet):
 
-    def get(self, request):
-        pass
-
-    def post(self, request):
-        pass
+    queryset = Loan.objects.all()
+    serializer_class = LoanSerializer

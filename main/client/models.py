@@ -75,7 +75,7 @@ class MemberAccount(models.Model):
 
 class Debit(models.Model):
     
-    reference = models.CharField(max_length=50)
+    reference = models.CharField(max_length=50, null=True)
     member_account = models.ForeignKey(MemberAccount, blank=True,\
         on_delete=models.CASCADE)
     date_debited = models.DateTimeField(auto_now_add=True)
@@ -84,22 +84,39 @@ class Debit(models.Model):
     def __str__(self):
         return f'{self.member_account} - {self.reference}'
 
+    @property
+    def members_name(self):
+        return f'{self.member_account}'
+
+
     def save(self, *args, **kwargs):
         
         if not self.reference:
 
-            self.reference = get_unique_code()
-        super(MemberAccount, self).save(* args, ** kwargs)
+            self.reference = f'DEB-{get_unique_code()}'
+        super(Debit, self).save(* args, ** kwargs)
 
 class Credit(models.Model):
 
-    reference = models.CharField(max_length=50)
-    member_account = models.ForeignKey(MemberAccount, blank=True, on_delete=models.CASCADE)
+    reference = models.CharField(max_length=50, null=True)
+    member_account = models.ForeignKey(MemberAccount, blank=True,\
+         on_delete=models.CASCADE)
     date_credited = models.DateTimeField(auto_now_add=True)
     amount = models.CharField(max_length=50)
     
     def __str__(self):
         return f'{self.member_account} - {self.reference}'
+
+    @property
+    def members_name(self):
+        return f'{self.member_account}'
+
+    def save(self, *args, **kwargs):
+        
+        if not self.reference:
+
+            self.reference = f'CRED-{get_unique_code()}'
+        super(Credit, self).save(* args, ** kwargs)
 
 class Loan(models.Model):
     reference_number = models.CharField(max_length=200)

@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from ..models import MemberAccount, Loan, Debit, Credit, Member, MemberType,\
     Group
 from ..helpers.account_creation import create_account
+from ..helpers.generate_codes import get_unique_code
+
 
 logger = logging.getLogger(__name__)
 
@@ -65,10 +67,30 @@ class MemberTypeSerializer(serializers.ModelSerializer):
 
 
 class DebitSerializer(serializers.ModelSerializer):
-    pass
+    
+    member_name = serializers.ReadOnlyField(source='members_name')
+    class Meta:
+        model = Debit
+        fields = '__all__'
+
+    def create(self, validated_data):
+        ref = f'DEB-{get_unique_code()}'
+        debit = Debit(amount=validated_data['amount'],\
+             member_account=validated_data['member_account'],
+             reference=ref
+             )
+
+        debit.save()
+        return debit
 
 class CreditSerializer(serializers.ModelSerializer):
-    pass
+
+    member = serializers.ReadOnlyField(source='members_name')
+    class Meta:
+        model = Credit
+        fields = '__all__'
 
 class LoanSerializer(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = Loan
+        fields = '__all__'
