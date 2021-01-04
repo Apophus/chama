@@ -13,11 +13,15 @@ logger = logging.getLogger(__name__)
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
+    member_count = serializers.SerializerMethodField()
     class Meta:
         fields = '__all__'
         model = Group
 
+    def get_member_count(self, obj):
+        members = MemberAccount.objects.filter(member__group=obj)
+
+        return members.count()
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Member
