@@ -1,11 +1,15 @@
 import logging
-from rest_framework import serializers
+from rest_framework import serializers, filters
+from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+# from django_filters.rest_framework import DjangoFilterBackend   
 
-from ..models import MemberAccount, Loan, Debit, Credit, Member
+from ..models import MemberAccount, Loan, Debit, Credit, Member, MemberType
 from ..helpers.account_creation import create_account
+
 logger = logging.getLogger(__name__)
+
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Member
@@ -31,9 +35,22 @@ class MemberSerializer(serializers.ModelSerializer):
 
 class MemberAccountSerializer(serializers.ModelSerializer):
     
+    member_name = serializers.SerializerMethodField()
     class Meta:
         model = MemberAccount
         fields = '__all__'
+
+    def get_member_name(self, obj):
+
+        names = f'{obj.member.first_name} {obj.member.last_name}'
+
+        return names
+class MemberTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MemberType
+        fields = '__all__'
+
 
 class DebitSerializer(serializers.ModelSerializer):
     pass

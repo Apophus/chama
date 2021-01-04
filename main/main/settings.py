@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'django_extensions',
+    #'django_filters',
     'client',
     
 ]
@@ -126,8 +127,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOG_FILE = str(BASE_DIR) + '/logs/system_logs.log'
-print(f' file == {LOG_FILE}')
+LOG_FILE = os.path.join(BASE_DIR, 'logs/system_logs.log')
+
 LOGGING = {
     'version': 1,
     # Version of logging
@@ -166,6 +167,16 @@ LOGGING = {
         'django': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
+        },
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
         },
     },
     },

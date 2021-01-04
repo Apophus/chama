@@ -6,8 +6,9 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
-from .serializers import MemberSerializer, MemberAccountSerializer
-from ..models import Member
+from .serializers import MemberSerializer, MemberAccountSerializer,\
+    MemberTypeSerializer
+from ..models import Member, MemberType, MemberAccount
 
 
 class LoginView(APIView):
@@ -27,6 +28,14 @@ class LoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST)
 
 
+class MemberListView(APIView):
+
+    def get(self, request):
+    
+        queryset = MemberAccount.objects.all()
+        data = MemberAccountSerializer(queryset, many=True).data
+
+        return Response(data)
 class MemberCreateView(generics.CreateAPIView):
     authentication_classes = ()
     permission_classes = ()
@@ -39,6 +48,12 @@ class MemberDetails(APIView):
         data = MemberSerializer(member).data
 
         return Response(data)
+
+class MemberTypeView(viewsets.ModelViewSet):
+
+    queryset = MemberType.objects.all()
+    serializer_class = MemberTypeSerializer
+
 
 class DebitView(APIView):
     
